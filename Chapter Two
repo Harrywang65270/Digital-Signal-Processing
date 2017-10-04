@@ -1,0 +1,108 @@
+Chapter Two
+
+Peridic Sequence:
+
+xtilde = x’ * ones(1,P); % P columns of x; x is a row vector
+xtilde = xtilde(:); % long column vector
+xtilde = xtilde’; % long row vector
+
+Signal Addiditon:
+
+function [y,n] = sigadd(x1,n1,x2,n2)
+% implements y(n) = x1(n)+x2(n)
+% -----------------------------
+% [y,n] = sigadd(x1,n1,x2,n2)
+% y = sum sequence over n, which includes n1 and n2
+% x1 = first sequence over n1
+% x2 = second sequence over n2 (n2 can be different from n1)
+%
+n = min(min(n1),min(n2)):max(max(n1),max(n2)); % duration of y(n)
+y1 = zeros(1,length(n)); y2 = y1; % initialization
+y1(find((n>=min(n1))&(n<=max(n1))==1))=x1; % x1 with duration of y
+y2(find((n>=min(n2))&(n<=max(n2))==1))=x2; % x2 with duration of y
+y = y1+y2; % sequence addition
+
+
+2.1.4 Some useful results
+
+Even and Odd synthesis
+
+function [xe,xo,m] = evenodd(x,n)
+% Real signal Decomposition into even and odd parts
+% -------------------------------------------------
+%[xe,xo,m] = evenodd(x,n)
+%
+
+if any(imag(x) ~= 0)
+    error('x is not a real sequence')
+end
+x1 = fliplr(x); n1=-fliplr(n);
+m = min(min(n1),min(n)):max(max(n1),max(n));
+y1 = zeros(1,length(m)); y2 = y1;
+y1(find((m>=min(n))&(m<=max(n))==1))=x; % x1 with duration of y
+y2(find((m>=min(n1))&(m<=max(n1))==1))=x1; % x2 with duration of y
+xe = 0.5*(y1+y2);
+xo = 0.5*(y1-y2);
+end
+
+2.2 Discrete Systems
+
+Equation (2,11)
+
+Linear time-invariant (LTI) system
+
+Example 2.6 has not been solved! (Page 38)
+
+
+Convolution:
+
+function [y,ny] = conv_m(x,nx,h,nh)
+% Modified convolution routine for signal processing 
+% --------------------------------------------------
+% [y,ny] = conv_m(x,nx,h,nh)
+% [y,ny] = convolution result
+% [x,nx] = first signal 
+% [h,nh] = second signal
+
+nyb = nx(1) + nh(1); nye = nx(length(x)) + nh(length(h));
+ny = [nyb:nye]; y = conv(x,h);
+
+
+2.3.2 Sequence Correlations Revisited
+
+% noise sequence 1
+
+x = [3,11,7,0,-1,4,2]; nx = [-3:3];
+[y,ny] = sigshift(x,nx,2);
+w = randn(1,length(y)); nw = nx; % this one is used differnent from the text book.
+[y,ny] = sigadd(y,ny,w,nw);
+[x,nx] = sigfold(x,nx);
+[z,nz] = conv_m(x,nx,y,ny);
+
+subplot(2,1,1);
+stem(nz,z)
+
+% noise sequence 2
+
+Example 2.10
+
+x = [3, 11, 7, 0, -1, 4, 2]; nx=[-3:3]; % given signal x(n)
+[y,ny] = sigshift(x,nx,2); % obtain x(n-2)
+w = randn(1,length(y)); nw = ny; % generate w(n)
+[y,ny] = sigadd(y,ny,w,nw); % obtain y(n) = x(n-2) + w(n)
+[x,nx] = sigfold(x,nx); % obtain x(-n)
+[rxy,nrxy] = conv_m(y,ny,x,nx); % crosscorrelation
+subplot(2,1,2);stem(nrxy,rxy)
+
+
+2.4 Difference Equations
+
+2.4.1 A function called filter is available to solve diference equations numerically, given the input 
+and the differnece equation coefficients.
+To compute and plot impulse response, MATLAB provides the function impz. 
+which invoked by: h = impz(b,a,n)
+
+Example 2.11
+
+
+
