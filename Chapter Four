@@ -1,0 +1,7 @@
+The z-transform
+
+There are two shortcomings to the Fourier transform approach. First, there are many useful signals 
+in practice- such s u(n) and nu(n) - for which the discrete-time Fourier transform doest not exist.
+Second, the transient response of a system due to initial conditions or due to changing inputs cannot
+be computed using the discrete-time Fourier transfrom approach.
+
