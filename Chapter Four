@@ -1,7 +1,11 @@
-The z-transform
+Chapter Four: The z-transform
 
 There are two shortcomings to the Fourier transform approach. First, there are many useful signals 
 in practice- such s u(n) and nu(n) - for which the discrete-time Fourier transform doest not exist.
 Second, the transient response of a system due to initial conditions or due to changing inputs cannot
 be computed using the discrete-time Fourier transfrom approach.
 
+4.4.1 System function from the difference equation representation
+
+It should be noted that the freqz function can also be used for numerical computation of the DTFT
+of a finite-duration, causal sequence x(n). In this approach, b = x and a = 1.
